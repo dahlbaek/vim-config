@@ -9,7 +9,7 @@ Containerized vim setups
 Go to [svim](svim) and run
 
 ```
-docker build . --tag nvim:v0.7.0 --build-arg "nvim_version=v0.7.0" --build-arg "username=$USER" --build-arg "sbt_opts=-Xmx8G -Xss4m"
+docker build . --tag svim:v0.7.0 --build-arg "nvim_version=v0.7.0" --build-arg "username=$USER" --build-arg "sbt_opts=-Xmx8G -Xss4m"
 ```
 
 ### Use image
