@@ -83,25 +83,19 @@ map("n", "]c", "<cmd>lua vim.diagnostic.goto_next { wrap = false }<CR>")
 -- completion related settings
 local cmp = require("cmp")
 cmp.setup({
-  sources = {
-    { name = "nvim_lsp" },
-    { name = "vsnip" },
-  },
   snippet = {
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body)
     end,
   },
   mapping = cmp.mapping.preset.insert({
-    ["<CR>"] = cmp.mapping.confirm({ select = true }),
-    ["<C-B>"] = function()
-      if cmp.visible() then
-        cmp.select_prev_item()
-      else
-        fallback()
-      end
-    end,
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
   }),
+  sources = {
+    { name = "nvim_lsp" },
+    { name = "vsnip" },
+  },
 })
 
 ----------------------------------
