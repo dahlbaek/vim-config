@@ -4,7 +4,6 @@ local api = vim.api
 -- Options -----------------------
 ----------------------------------
 vim.opt_global.completeopt = { "menu", "menuone", "noinsert", "noselect" }
-vim.opt.laststatus = 3
 
 ----------------------------------
 -- Global Mappings ---------------
@@ -57,7 +56,7 @@ local on_attach = function(client, bufnr)
   api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   -- Black mapping
-  map("n", "<leader>f", "<cmd>%! black -q -<CR>")
+  map("n", "<leader>fm", "<cmd>%! black -q -<CR>")
 
   -- Telescope mappings
   map("n", "<leader>ff", "<cmd>lua require'telescope.builtin'.find_files()<CR>")
@@ -70,7 +69,7 @@ local on_attach = function(client, bufnr)
   map("n", "gds", "<cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>")
   map("n", "gws", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<CR>")
   map("i", "<C-h>", [[<cmd>lua vim.lsp.buf.signature_help()<CR>]])
-  map("n", "<leader>r", "<cmd>lua vim.lsp.buf.rename()<CR>")
+  map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
   map("n", "<leader>d", "<cmd>lua require'telescope.builtin'.diagnostics()<CR>")
 end
 

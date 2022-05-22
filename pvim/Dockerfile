@@ -44,7 +44,7 @@ USER ${username}
 ENV HOME /home/${username}
 ENV PATH "$PATH:$HOME/.local/bin"
 ENV XDG_CONFIG_HOME "$HOME/.config"
-RUN mkdir "$HOME/.config"
+RUN mkdir "$XDG_CONFIG_HOME"
 
 
 # install nvim config
