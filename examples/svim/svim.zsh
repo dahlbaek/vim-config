@@ -5,6 +5,6 @@ svim () {
         docker run --interactive --tty --rm --detach-keys='ctrl-_,_' \
                 --mount "type=bind,readonly,source=$HOME/.sbt/1.0/sonatype.sbt,target=$HOME/.sbt/1.0/sonatype.sbt" \
                 --mount "type=volume,source=svim-cache,target=$HOME/.cache" \
-                --mount "type=bind,source="$PWD",target=$HOME/workspace" \
-                nvim:v0.7.0 "$@"
+                --mount "type=bind,source=$PWD,target=$HOME/workspace" \
+                svim:v0.7.0 "$@"
 }
