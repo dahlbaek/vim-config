@@ -47,7 +47,19 @@ RUN curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux
 RUN chmod +x "$HOME/cs"
 ENV PATH "$PATH:$HOME/.local/share/coursier/bin"
 RUN "$HOME/cs" setup --yes
-RUN cs install metals
+RUN cs bootstrap \
+      --java-opt -Xss4m \
+      --java-opt -Xms100m \
+      --java-opt -Dmetals.client=nvim-lspconfig \
+      --java-opt -Dmetals.bloopSbtAlreadyInstalled=true \
+      --java-opt -Dmetals.superMethodLensesEnabled=true \
+      --java-opt -Dmetals.showInferredType=true \
+      --java-opt -Dmetals.showImplicitArguments=true \
+      --java-opt -Dmetals.showImplicitConversionsAndClasses=true \
+      metals \
+      -r bintray:scalacenter/releases \
+      -r sonatype:snapshots \
+      -o "$HOME/.local/share/coursier/bin/metals" -f
 
 # install nvim config
 COPY --chown=${username}:${username} nvim "$XDG_CONFIG_HOME/nvim"
