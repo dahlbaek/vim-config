@@ -46,6 +46,11 @@ local on_attach = function(client, bufnr)
   map("n", "<leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>")
 end
 
+root_dir = function()
+  return vim.env.HOME .. "/workspace"
+end
+
 require("lspconfig").metals.setup({
   on_attach = on_attach,
+  root_dir = root_dir,
 })
