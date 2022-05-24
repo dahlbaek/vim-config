@@ -10,6 +10,7 @@ vim.o.grepprg = "rg --vimgrep --smart-case"
 -- Commands ----------------------
 ----------------------------------
 vim.api.nvim_create_user_command('Rg', 'silent grep! <args> | copen | wincmd p', { nargs = "+" })
+vim.api.nvim_create_user_command('Metals', 'lua vim.lsp.buf.execute_command({ command = "metals.<args>" })', { nargs = 1 })
 
 ----------------------------------
 -- Global Mappings ---------------

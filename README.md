@@ -29,6 +29,14 @@ You can use the image like this from a project root
 svim path/to/file.scala
 ```
 
+Inside vim, there is a custom command `Metals` available to make it easier to run
+metals related lsp commands. For intance, if you want to change the build server,
+you can do
+
+```
+:Metals bsp-switch
+```
+
 ## Python based nvim setup
 
 ### Create image
