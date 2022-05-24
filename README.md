@@ -9,7 +9,12 @@ Containerized vim setups
 Go to [svim](svim) and run
 
 ```
-docker build . --tag svim:v0.7.0 --build-arg "nvim_version=v0.7.0" --build-arg "username=$USER" --build-arg "sbt_opts=-Xmx8G -Xss4m"
+docker build . \
+  --tag svim:v0.7.0 \
+  --build-arg nvim_version=333ba6569d833e22c0d291547d740d4bbfa3fdab \
+  --build-arg nvim_lspconfig_version=99596a8cabb050c6eab2c049e9acde48f42aafa4 \
+  --build-arg "username=$USER" \
+  --build-arg "sbt_opts=-Xmx8G -Xss4m"
 ```
 
 ### Use image
@@ -31,7 +36,11 @@ svim path/to/file.scala
 Go to [pvim](pvim) and run
 
 ```
-docker build . --tag pvim:v0.7.0 --build-arg "nvim_version=v0.7.0" --build-arg "username=$USER"
+docker build . \
+  --tag pvim:v0.7.0 \
+  --build-arg nvim_version=333ba6569d833e22c0d291547d740d4bbfa3fdab \
+  --build-arg nvim_lspconfig_version=99596a8cabb050c6eab2c049e9acde48f42aafa4 \
+  --build-arg "username=$USER"
 ```
 
 ### Use image

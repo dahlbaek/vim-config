@@ -9,16 +9,21 @@ RUN apt-get install -y ninja-build gettext libtool libtool-bin autoconf automake
 
 # build neovim
 RUN apt-get install -y git
-RUN git clone https://github.com/neovim/neovim /usr/local/src/neovim
-WORKDIR /usr/local/src/neovim
-RUN git checkout $nvim_version
-RUN make CMAKE_BUILD_TYPE=Release
-RUN make install
+RUN mkdir -p /usr/local/src/neovim
+RUN cd /usr/local/src/neovim \
+ && git init \
+ && git remote add origin https://github.com/neovim/neovim \
+ && git fetch --depth 1 origin "$nvim_version" \
+ && git checkout "$nvim_version" \
+ && make CMAKE_BUILD_TYPE=Release \
+ && make install
+
 
 FROM ubuntu:22.04
 
 ARG username
 ARG sbt_opts
+ARG nvim_lspconfig_version
 
 RUN apt-get update
 RUN apt-get install -y git ripgrep
@@ -64,9 +69,14 @@ RUN cs bootstrap \
 # install nvim config
 COPY --chown=${username}:${username} nvim "$XDG_CONFIG_HOME/nvim"
 
-# install nvim plugins
-RUN git clone --depth 1 https://github.com/neovim/nvim-lspconfig \
-      "$HOME/.local/share/nvim/site/pack/packer/start/lspconfig"
+# install nvim-lspconfig plugin
+RUN mkdir -p "$HOME/.local/share/nvim/site/pack/packer/start/lspconfig"
+RUN cd "$HOME/.local/share/nvim/site/pack/packer/start/lspconfig" \
+ && git init \
+ && git remote add origin https://github.com/neovim/nvim-lspconfig \
+ && git fetch --depth 1 origin "$nvim_lspconfig_version" \
+ && git checkout "$nvim_lspconfig_version"
+
 
 RUN mkdir "$HOME/workspace"
 WORKDIR "$HOME/workspace"
