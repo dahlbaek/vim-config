@@ -1,6 +1,5 @@
 FROM ubuntu:22.04
 
-ARG username
 ARG nvim_version
 
 # neovim build deps
@@ -24,13 +23,11 @@ FROM ubuntu:22.04
 ARG username
 ARG nvim_lspconfig_version
 
+# install nvim
 RUN apt-get update
 RUN apt-get install -y git ripgrep
-
-# install nvim
 COPY --from=0 /usr/local/bin/nvim /usr/local/bin/nvim
 COPY --from=0 /usr/local/share/nvim/ /usr/local/share/nvim/
-
 
 # install python tools
 RUN apt-get install -y black python3-venv
@@ -45,10 +42,8 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN useradd -ms /bin/bash ${username}
 USER ${username}
 ENV HOME /home/${username}
-ENV PATH "$PATH:$HOME/.local/bin"
 ENV XDG_CONFIG_HOME "$HOME/.config"
 RUN mkdir "$XDG_CONFIG_HOME"
-
 
 # install nvim config
 COPY --chown=${username}:${username} nvim "$XDG_CONFIG_HOME/nvim"
@@ -61,7 +56,6 @@ RUN cd "$HOME/.local/share/nvim/site/pack/packer/start/lspconfig" \
  && git fetch --depth 1 origin "$nvim_lspconfig_version" \
  && git checkout "$nvim_lspconfig_version"
 
-# create virtual environment
 RUN python3 -m venv "$HOME/.venv"
 
 RUN mkdir "$HOME/workspace"

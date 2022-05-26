@@ -1,6 +1,5 @@
 FROM ubuntu:22.04
 
-ARG username
 ARG nvim_version
 
 # neovim build deps
@@ -25,33 +24,22 @@ ARG username
 ARG sbt_opts
 ARG nvim_lspconfig_version
 
+# install nvim
 RUN apt-get update
 RUN apt-get install -y git ripgrep
-# install nvim
 COPY --from=0 /usr/local/bin/nvim /usr/local/bin/nvim
 COPY --from=0 /usr/local/share/nvim/ /usr/local/share/nvim/
 
 # install scala tools
 RUN apt-get install -y openjdk-11-jre openjdk-11-jdk openjdk-11-source
-# cs installation dep
-RUN apt-get install -y curl gzip
-
-# copy entrypoint
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-
-# create user
-RUN useradd -ms /bin/bash ${username}
-USER ${username}
-ENV HOME /home/${username}
-RUN mkdir -p "$HOME/.sbt/1.0"
-ENV XDG_CONFIG_HOME "$HOME/.config"
-RUN mkdir "$XDG_CONFIG_HOME"
-
 # install metals
-RUN curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d >"$HOME/cs"
-RUN chmod +x "$HOME/cs"
-ENV PATH "$PATH:$HOME/.local/share/coursier/bin"
-RUN "$HOME/cs" setup --yes
+RUN apt-get install -y curl gzip
+RUN mkdir /cs
+RUN curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d >/cs/cs
+RUN chmod u+x /cs/cs
+RUN /cs/cs setup --yes --install-dir /usr/local/bin --apps cs,scalac,scalafmt
+RUN chmod 0744 /usr/local/bin/cs
+RUN cs bootstrap sbt --assembly -o /usr/local/bin/sbt
 RUN cs bootstrap \
       --java-opt -Xss4m \
       --java-opt -Xms100m \
@@ -64,7 +52,17 @@ RUN cs bootstrap \
       metals \
       -r bintray:scalacenter/releases \
       -r sonatype:snapshots \
-      -o "$HOME/.local/share/coursier/bin/metals" -f
+      -o /usr/local/bin/metals -f
+
+# install entrypoint
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# create user
+RUN useradd -ms /bin/bash ${username}
+USER ${username}
+ENV HOME /home/${username}
+ENV XDG_CONFIG_HOME "$HOME/.config"
+RUN mkdir "$XDG_CONFIG_HOME"
 
 # install nvim config
 COPY --chown=${username}:${username} nvim "$XDG_CONFIG_HOME/nvim"
@@ -77,9 +75,10 @@ RUN cd "$HOME/.local/share/nvim/site/pack/packer/start/lspconfig" \
  && git fetch --depth 1 origin "$nvim_lspconfig_version" \
  && git checkout "$nvim_lspconfig_version"
 
+RUN mkdir -p "$HOME/.sbt/1.0"
+ENV SBT_OPTS $sbt_opts
 
 RUN mkdir "$HOME/workspace"
 WORKDIR "$HOME/workspace"
-ENV SBT_OPTS $sbt_opts
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
