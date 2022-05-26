@@ -58,3 +58,27 @@ You can use the image like this from a project root
 ```
 pvim path/to/file.py
 ```
+
+## Go based nvim setup
+
+### Create image
+
+Go to [gvim](gvim) and run
+
+```
+docker build gvim \
+  --tag gvim:v0.7.0 \
+  --build-arg "username=$USER"
+```
+
+### Use image
+
+There is a [zsh example](examples/gvim/gvim.zsh). The gvim
+function will mount a workspace from the host machine, and
+attach (or create) a volume for the go mod cache.
+
+You can use the image like this from a project root
+
+```
+gvim path/to/file.go
+```

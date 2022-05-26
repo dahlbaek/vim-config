@@ -44,6 +44,11 @@ RUN cs bootstrap \
       -o /usr/local/bin/metals -f
 """
 
+INSTALL_GO_TOOLS = r"""
+# install go tools
+RUN dnf install -y golang golang-x-tools-gopls
+"""
+
 USER_SETUP = r"""
 # create user
 RUN useradd -ms /bin/bash ${username}
@@ -74,6 +79,10 @@ RUN mkdir -p "$HOME/.sbt/1.0"
 ENV SBT_OPTS $sbt_opts
 """
 
+GO_ENV = r"""
+RUN mkdir "$HOME/go"
+"""
+
 COMMON_POSTFIX = r"""
 RUN mkdir "$HOME/workspace"
 WORKDIR "$HOME/workspace"
@@ -81,15 +90,18 @@ WORKDIR "$HOME/workspace"
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 """
 
+GVIM = "gvim"
 PVIM = "pvim"
 SVIM = "svim"
 
 install_tools = {
+    GVIM: INSTALL_GO_TOOLS,
     PVIM: INSTALL_PYTHON_TOOLS,
     SVIM: INSTALL_SCALA_TOOLS,
 }
 
 install_env = {
+    GVIM: GO_ENV,
     PVIM: PYTHON_ENV,
     SVIM: SCALA_ENV,
 }
@@ -103,7 +115,7 @@ def create_dockerfile(image):
         out.write(COMMON_POSTFIX)
 
 def main():
-    for image in [PVIM, SVIM]:
+    for image in [GVIM, PVIM, SVIM]:
         create_dockerfile(image)
 
 if __name__ == "__main__":
