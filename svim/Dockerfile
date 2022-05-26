@@ -1,45 +1,20 @@
-FROM ubuntu:22.04
-
-ARG nvim_version
-
-# neovim build deps
-RUN apt-get update
-RUN apt-get install -y ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen
-
-# build neovim
-RUN apt-get install -y git
-RUN mkdir -p /usr/local/src/neovim
-RUN cd /usr/local/src/neovim \
- && git init \
- && git remote add origin https://github.com/neovim/neovim \
- && git fetch --depth 1 origin "$nvim_version" \
- && git checkout "$nvim_version" \
- && make CMAKE_BUILD_TYPE=Release \
- && make install
-
-
-FROM ubuntu:22.04
+FROM fedora:36
 
 ARG username
 ARG sbt_opts
-ARG nvim_lspconfig_version
 
-# install nvim
-RUN apt-get update
-RUN apt-get install -y git ripgrep
-COPY --from=0 /usr/local/bin/nvim /usr/local/bin/nvim
-COPY --from=0 /usr/local/share/nvim/ /usr/local/share/nvim/
+# install neovim
+RUN dnf install -y git ripgrep neovim
 
 # install scala tools
-RUN apt-get install -y openjdk-11-jre openjdk-11-jdk openjdk-11-source
-# install metals
-RUN apt-get install -y curl gzip
+RUN dnf install -y java-11-openjdk java-11-openjdk-devel java-11-openjdk-src
 RUN mkdir /cs
 RUN curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d >/cs/cs
 RUN chmod u+x /cs/cs
 RUN /cs/cs setup --yes --install-dir /usr/local/bin --apps cs,scalac,scalafmt
 RUN chmod 0744 /usr/local/bin/cs
 RUN cs bootstrap sbt --assembly -o /usr/local/bin/sbt
+# install metals
 RUN cs bootstrap \
       --java-opt -Xss4m \
       --java-opt -Xms100m \
@@ -72,8 +47,8 @@ RUN mkdir -p "$HOME/.local/share/nvim/site/pack/packer/start/lspconfig"
 RUN cd "$HOME/.local/share/nvim/site/pack/packer/start/lspconfig" \
  && git init \
  && git remote add origin https://github.com/neovim/nvim-lspconfig \
- && git fetch --depth 1 origin "$nvim_lspconfig_version" \
- && git checkout "$nvim_lspconfig_version"
+ && git fetch --depth 1 origin 99596a8cabb050c6eab2c049e9acde48f42aafa4 \
+ && git checkout 99596a8cabb050c6eab2c049e9acde48f42aafa4
 
 RUN mkdir -p "$HOME/.sbt/1.0"
 ENV SBT_OPTS $sbt_opts

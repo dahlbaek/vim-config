@@ -3,5 +3,5 @@
 . "$HOME/.venv/bin/activate"
 pip install -r requirements.txt
 
-exec nvim "$@"
+exec /usr/bin/nvim "$@"
 

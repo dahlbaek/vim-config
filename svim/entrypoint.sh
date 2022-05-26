@@ -5,5 +5,5 @@ if [ "$1" = --pull ] ; then
   sbt pullRemoteCache
 fi
 
-exec /usr/local/bin/nvim "$@"
+exec /usr/bin/nvim "$@"
 
