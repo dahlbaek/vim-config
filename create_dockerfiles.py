@@ -17,6 +17,7 @@ RUN dnf install -y black
 # install pyright
 RUN dnf install -y nodejs npm
 RUN npm install -g pyright
+RUN dnf remove -y npm
 """
 
 INSTALL_SCALA_TOOLS = r"""
