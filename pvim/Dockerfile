@@ -5,14 +5,14 @@ ARG username
 # install neovim
 RUN dnf install -y git ripgrep neovim
 
+# install entrypoint
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
 # install python tools
 RUN dnf install -y black
 # install pyright
 RUN dnf install -y nodejs npm
 RUN npm install -g pyright
-
-# install entrypoint
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # create user
 RUN useradd -ms /bin/bash ${username}

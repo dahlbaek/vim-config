@@ -1,4 +1,6 @@
-FROM fedora:36
+#!/usr/bin/env python3
+
+COMMON_SETUP = r"""FROM fedora:36
 
 ARG username
 
@@ -7,7 +9,17 @@ RUN dnf install -y git ripgrep neovim
 
 # install entrypoint
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+"""
 
+INSTALL_PYTHON_TOOLS = r"""
+# install python tools
+RUN dnf install -y black
+# install pyright
+RUN dnf install -y nodejs npm
+RUN npm install -g pyright
+"""
+
+INSTALL_SCALA_TOOLS = r"""
 # install scala tools
 RUN dnf install -y java-11-openjdk java-11-openjdk-devel java-11-openjdk-src
 RUN mkdir /cs
@@ -30,7 +42,9 @@ RUN cs bootstrap \
       -r bintray:scalacenter/releases \
       -r sonatype:snapshots \
       -o /usr/local/bin/metals -f
+"""
 
+USER_SETUP = r"""
 # create user
 RUN useradd -ms /bin/bash ${username}
 USER ${username}
@@ -48,12 +62,50 @@ RUN cd "$HOME/.local/share/nvim/site/pack/packer/start/lspconfig" \
  && git remote add origin https://github.com/neovim/nvim-lspconfig \
  && git fetch --depth 1 origin 99596a8cabb050c6eab2c049e9acde48f42aafa4 \
  && git checkout 99596a8cabb050c6eab2c049e9acde48f42aafa4
+"""
 
+PYTHON_ENV = r"""
+RUN python3 -m venv "$HOME/.venv"
+"""
+
+SCALA_ENV = r"""
 ARG sbt_opts
 RUN mkdir -p "$HOME/.sbt/1.0"
 ENV SBT_OPTS $sbt_opts
+"""
 
+COMMON_POSTFIX = r"""
 RUN mkdir "$HOME/workspace"
 WORKDIR "$HOME/workspace"
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+"""
+
+PVIM = "pvim"
+SVIM = "svim"
+
+install_tools = {
+    PVIM: INSTALL_PYTHON_TOOLS,
+    SVIM: INSTALL_SCALA_TOOLS,
+}
+
+install_env = {
+    PVIM: PYTHON_ENV,
+    SVIM: SCALA_ENV,
+}
+
+def create_dockerfile(image):
+    with open(f"{image}/Dockerfile", mode="w", encoding="utf-8") as out:
+        out.write(COMMON_SETUP)
+        out.write(install_tools[image])
+        out.write(USER_SETUP)
+        out.write(install_env[image])
+        out.write(COMMON_POSTFIX)
+
+def main():
+    for image in [PVIM, SVIM]:
+        create_dockerfile(image)
+
+if __name__ == "__main__":
+    main()
+
