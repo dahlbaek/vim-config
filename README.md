@@ -9,7 +9,7 @@ Containerized vim setups
 Go to [svim](svim) and run
 
 ```
-docker build . \
+docker build svim \
   --tag svim:v0.7.0 \
   --build-arg "username=$USER" \
   --build-arg "sbt_opts=-Xmx8G -Xss4m"
@@ -42,7 +42,7 @@ you can do
 Go to [pvim](pvim) and run
 
 ```
-docker build . \
+docker build pvim \
   --tag pvim:v0.7.0 \
   --build-arg "username=$USER"
 ```
