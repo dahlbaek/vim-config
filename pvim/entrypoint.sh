@@ -1,7 +1,9 @@
 #!/bin/sh
 
 . "$HOME/.venv/bin/activate"
-pip install -r requirements.txt
+if [ -f requirements.txt ] ; then
+  pip install -r requirements.txt
+fi
 
 exec /usr/bin/nvim "$@"
 
