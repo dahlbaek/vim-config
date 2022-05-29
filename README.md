@@ -6,8 +6,6 @@ Containerized vim setups
 
 ### Create image
 
-Go to [svim](svim) and run
-
 ```
 docker build svim \
   --tag svim:v0.7.0 \
@@ -39,8 +37,6 @@ you can do
 
 ### Create image
 
-Go to [pvim](pvim) and run
-
 ```
 docker build pvim \
   --tag pvim:v0.7.0 \
@@ -62,8 +58,6 @@ pvim path/to/file.py
 ## Go based nvim setup
 
 ### Create image
-
-Go to [gvim](gvim) and run
 
 ```
 docker build gvim \
