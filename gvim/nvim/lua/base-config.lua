@@ -4,7 +4,8 @@ local api = vim.api
 -- Options -----------------------
 ----------------------------------
 vim.opt_global.completeopt = { "menu", "menuone", "noinsert", "noselect" }
-vim.o.grepprg = "rg --vimgrep --smart-case"
+vim.opt.grepprg = "rg --vimgrep --smart-case"
+vim.opt.ruler = false
 
 ----------------------------------
 -- Commands ----------------------
@@ -21,10 +22,12 @@ api.nvim_set_keymap("n", "<leader>d", "<cmd>lua vim.diagnostic.setqflist()<CR>",
 api.nvim_set_keymap("n", "<C-j>", "<cmd>cnext<CR>zz", opts)
 api.nvim_set_keymap("n", "<C-k>", "<cmd>cprevious<CR>zz", opts)
 
+local M = {}
+
 ----------------------------------
 -- LSP Setup ---------------------
 ----------------------------------
-local function on_attach(client, bufnr)
+function M.on_attach(client, bufnr)
   local function map(mode, lhs, rhs)
     api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, { noremap = true })
   end
@@ -45,7 +48,5 @@ local function on_attach(client, bufnr)
   map("n", "<leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>")
 end
 
-return {
-  on_attach = on_attach
-}
+return M
 
