@@ -50,6 +50,11 @@ INSTALL_GO_TOOLS = r"""
 RUN dnf install -y golang golang-x-tools-gopls
 """
 
+INSTALL_RUST_TOOLS = r"""
+# install rust tools
+RUN dnf install -y cargo rust-src rls
+"""
+
 USER_SETUP = r"""
 # create user
 RUN useradd -ms /bin/bash ${username}
@@ -84,6 +89,10 @@ GO_ENV = r"""
 RUN mkdir "$HOME/go"
 """
 
+RUST_ENV = r"""
+RUN mkdir "$HOME/.cargo"
+"""
+
 COMMON_POSTFIX = r"""
 RUN mkdir "$HOME/workspace"
 WORKDIR "$HOME/workspace"
@@ -93,17 +102,20 @@ ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 GVIM = "gvim"
 PVIM = "pvim"
+RVIM = "rvim"
 SVIM = "svim"
 
 install_tools = {
     GVIM: INSTALL_GO_TOOLS,
     PVIM: INSTALL_PYTHON_TOOLS,
+    RVIM: INSTALL_RUST_TOOLS,
     SVIM: INSTALL_SCALA_TOOLS,
 }
 
 install_env = {
     GVIM: GO_ENV,
     PVIM: PYTHON_ENV,
+    RVIM: RUST_ENV,
     SVIM: SCALA_ENV,
 }
 
@@ -116,7 +128,7 @@ def create_dockerfile(image):
         out.write(COMMON_POSTFIX)
 
 def main():
-    for image in [GVIM, PVIM, SVIM]:
+    for image in [GVIM, PVIM, RVIM, SVIM]:
         create_dockerfile(image)
 
 if __name__ == "__main__":

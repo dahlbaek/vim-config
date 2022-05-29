@@ -76,3 +76,25 @@ You can use the image like this from a project root
 ```
 gvim path/to/file.go
 ```
+
+## Rust based nvim setup
+
+### Create image
+
+```
+podman build rvim \
+  --tag rvim:v0.7.0 \
+  --build-arg "username=$USER"
+```
+
+### Use image
+
+There is a [zsh example](examples/rvim/rvim.zsh). The rvim
+function will mount a workspace from the host machine, and
+attach (or create) a volume for the rust build dependency cache.
+
+You can use the image like this from a project root
+
+```
+rvim path/to/file.rs
+```
