@@ -7,7 +7,7 @@ Containerized vim setups
 ### Create image
 
 ```
-docker build svim \
+podman build svim \
   --tag svim:v0.7.0 \
   --build-arg "username=$USER" \
   --build-arg "sbt_opts=-Xmx8G -Xss4m"
@@ -38,7 +38,7 @@ you can do
 ### Create image
 
 ```
-docker build pvim \
+podman build pvim \
   --tag pvim:v0.7.0 \
   --build-arg "username=$USER"
 ```
@@ -60,7 +60,7 @@ pvim path/to/file.py
 ### Create image
 
 ```
-docker build gvim \
+podman build gvim \
   --tag gvim:v0.7.0 \
   --build-arg "username=$USER"
 ```
