@@ -15,7 +15,7 @@ docker build svim \
 
 ### Use image
 
-There is a [zsh example](examples/svim/svim.zsh). The svim
+There is a [zsh example](examples/svim.zsh). The svim
 function will mount credentials and a workspace from the host machine,
 and attach (or create) a volume for cached data.
 
@@ -45,7 +45,7 @@ docker build pvim \
 
 ### Use image
 
-There is a [zsh example](examples/pvim/pvim.zsh). The pvim
+There is a [zsh example](examples/pvim.zsh). The pvim
 function will mount a workspace from the host machine,
 and attach (or create) a volume for a virtual environment.
 
@@ -67,7 +67,7 @@ docker build gvim \
 
 ### Use image
 
-There is a [zsh example](examples/gvim/gvim.zsh). The gvim
+There is a [zsh example](examples/gvim.zsh). The gvim
 function will mount a workspace from the host machine, and
 attach (or create) a volume for the go mod cache.
 
