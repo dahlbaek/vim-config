@@ -15,7 +15,7 @@ podman build svim \
 
 ### Use image
 
-There is a [zsh example](examples/svim.zsh). The svim
+There is a [fish example](examples/svim.fish). The svim
 function will mount credentials and a workspace from the host machine,
 and attach (or create) a volume for cached data.
 
@@ -45,7 +45,7 @@ podman build pvim \
 
 ### Use image
 
-There is a [zsh example](examples/pvim.zsh). The pvim
+There is a [fish example](examples/pvim.fish). The pvim
 function will mount a workspace from the host machine,
 and attach (or create) a volume for a virtual environment.
 
@@ -67,7 +67,7 @@ podman build gvim \
 
 ### Use image
 
-There is a [zsh example](examples/gvim.zsh). The gvim
+There is a [fish example](examples/gvim.fish). The gvim
 function will mount a workspace from the host machine, and
 attach (or create) a volume for the go mod cache.
 
