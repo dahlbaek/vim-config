@@ -35,6 +35,10 @@ RUN cd "$HOME/.local/share/nvim/site/pack/packer/start/lspconfig" \
  && git fetch --depth 1 origin 99596a8cabb050c6eab2c049e9acde48f42aafa4 \
  && git checkout 99596a8cabb050c6eab2c049e9acde48f42aafa4
 
+COPY --chown=${username}:${username} get-poetry.py "$HOME/get-poetry.py"
+RUN python3 "$HOME/get-poetry.py"
+RUN rm "$HOME/get-poetry.py"
+
 RUN python3 -m venv "$HOME/.venv"
 
 RUN mkdir "$HOME/workspace"

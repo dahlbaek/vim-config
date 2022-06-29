@@ -1,9 +1,8 @@
 #!/bin/sh
 
-. "$HOME/.venv/bin/activate"
-if [ -f requirements.txt ] ; then
-  pip install -r requirements.txt
-fi
+source "$HOME/.poetry/env"
+source "$HOME/.venv/bin/activate"
+poetry install
 
 exec /usr/bin/nvim "$@"
 
