@@ -38,9 +38,10 @@ you can do
 ### Create image
 
 ```
-podman build pvim \
+docker build pvim \
   --tag pvim:v0.7.0 \
   --build-arg "username=$USER"
+  --build-arg "userid=${id -u "$USER")"
 ```
 
 ### Use image

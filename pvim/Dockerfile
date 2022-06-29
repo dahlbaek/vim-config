@@ -1,6 +1,7 @@
 FROM fedora:36
 
 ARG username
+ARG userid
 
 # install neovim
 RUN dnf install -y git ripgrep neovim
@@ -16,9 +17,10 @@ RUN npm install -g pyright
 RUN dnf remove -y npm
 
 # create user
-RUN useradd -ms /bin/bash ${username}
-USER ${username}
-ENV HOME /home/${username}
+RUN groupadd --gid "${userid}" "${username}"
+RUN useradd --uid "${userid}" --gid "${userid}" --create-home --shell /bin/bash "${username}"
+USER ${userid}
+ENV HOME "/home/${username}"
 ENV XDG_CONFIG_HOME "$HOME/.config"
 RUN mkdir "$XDG_CONFIG_HOME"
 
